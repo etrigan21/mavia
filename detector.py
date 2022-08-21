@@ -3,6 +3,7 @@ import numpy as np
 import time
 
 class Detector:
+    startingTime = 0
     def __init__(self, videoPath, configPath, modelPath, classPath):
         self.videoPath = videoPath
         self.configPath = configPath
@@ -49,7 +50,11 @@ class Detector:
                     # classColor = [int(c) for c in self.colorList[classLabelID]]
                     x,y,w,h = bbox
                     displayText  = "{classname},{confidence}".format(classname=classLabel, confidence=classConfidence)
-                    print("displayText", displayText)
+                    if newtime - self.startingTime >= 60:
+                        print("Aigooooo")
+                        self.startingTime = newtime
+                    if classLabel == "person" and classConfidence > 0.73:
+                        print("AAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEERT")
                     cv2.rectangle(image, (x,y), (x+w, y+h), color=(255,255,255), thickness=1)
                     cv2.putText(image, displayText, (x, y - 10), cv2.FONT_HERSHEY_COMPLEX, 1,(225,0,0),2)
             cv2.imshow("result", image)
